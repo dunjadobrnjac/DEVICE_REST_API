@@ -44,7 +44,8 @@ class Login(MethodView):
             if device.status == DeviceStatus.DELETED:
                 return jsonify(
                     {
-                        "status": "The device cannot be logged in because the account has been deleted. Please register again.",
+                        "status": "The device cannot be logged in because the account has been deleted. "
+                                  "Please register again.",
                         "device_status": device.status.value,
                     }
                 ), 401
