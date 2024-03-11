@@ -13,3 +13,9 @@ class DeviceRegistrationSchema(Schema):
 class RegistrationUpdateSchema(Schema):
     status = fields.String(required=True)
     device_id = fields.Integer(required=True)
+
+
+class DataSchema(Schema):
+    value = fields.Float(required=True)
+    unit = fields.String(required=True)
+    name = fields.String(required=True)
