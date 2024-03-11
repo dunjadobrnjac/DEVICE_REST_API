@@ -1,7 +1,8 @@
 from flask.views import MethodView
-from flask_smorest import Blueprint
+from flask_smorest import Blueprint, abort
 from flask import jsonify
 from flask_jwt_extended import create_access_token
+from passlib.hash import pbkdf2_sha256
 
 from schemas import HeaderSchema, DeviceRegistrationSchema, RegistrationUpdateSchema
 
@@ -26,7 +27,9 @@ class Login(MethodView):
         if not device:
             return jsonify({"status": "Device not found or invalid ID provided."}), 404
 
-        if device.username != username or device.password != password:
+        if device.username != username or not pbkdf2_sha256.verify(
+            password, device.password
+        ):
             return jsonify({"status": "Invalid credentials."}), 401
 
         if device.status != DeviceStatus.APPROVED:
@@ -92,7 +95,7 @@ class Registration(MethodView):
 
         new_device = DeviceModel(
             username=username,
-            password=password,
+            password=pbkdf2_sha256.hash(password),
             serial_number=serial_number,
             status=DeviceStatus.CREATED,
         )
@@ -121,7 +124,9 @@ class RegistrationStatus(MethodView):
 
         # device = DeviceModel.query.get_or_404(id)
 
-        if device.username != username or device.password != password:
+        if device.username != username or not pbkdf2_sha256.verify(
+            password, device.password
+        ):
             return jsonify({"status": "Invalid credentials."}), 401
 
         if device.status != DeviceStatus.APPROVED:
@@ -156,7 +161,7 @@ class RegistrationUpdate(MethodView):
                 {"status": "User not found or invalid username provided."}
             ), 404
 
-        if password != user.password:
+        if not pbkdf2_sha256.verify(password, user.password):
             return jsonify({"status": "Invalid password."}), 401
 
         device = DeviceModel.query.get(device_id)
@@ -184,7 +189,9 @@ class DeleteRegistration(MethodView):
 
         # device = DeviceModel.query.get_or_404(id)
 
-        if device.username != username or device.password != password:
+        if device.username != username or not pbkdf2_sha256.verify(
+            password, device.password
+        ):
             return jsonify({"status": "Invalid credentials."}), 401
 
         if device.status == DeviceStatus.BLACKLISTED:
