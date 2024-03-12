@@ -3,17 +3,20 @@ from flask_smorest import Blueprint, abort
 from flask import jsonify
 from passlib.hash import pbkdf2_sha256
 
-from schemas import HeaderSchema
+from schemas import HeaderSchema, UserRegistrationSchema
 
 from models import UserModel
 from db import db
 
 blp = Blueprint("user", __name__, description="User registration")
 
+user_schema = UserRegistrationSchema()
+
 
 @blp.route("/user/register")
 class Registration(MethodView):
     @blp.arguments(HeaderSchema, location="headers")
+    @blp.response(201, UserRegistrationSchema)
     def post(self, header_data):
         username = header_data.get("username")
         password = header_data.get("password")
@@ -26,10 +29,6 @@ class Registration(MethodView):
         db.session.add(new_user)
         db.session.commit()
 
-        return jsonify(
-            {
-                "status": "User created successfully.",
-                "id": new_user.id,
-                "username": new_user.username,
-            }
-        ), 201
+        new_user_json = user_schema.dump(new_user)
+
+        return jsonify(new_user_json), 201

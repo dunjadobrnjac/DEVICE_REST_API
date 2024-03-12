@@ -7,16 +7,16 @@ from dotenv import load_dotenv
 
 from db import db
 
-from resources.authentication import blp as AuthBlueprint
-from resources.user import blp as UserBlueprint
-from resources.data import blp as DataBlueprint
+from resources import AuthBlueprint
+from resources import UserBlueprint
+from resources import DataBlueprint
 
 
 def create_app():
     app = Flask(__name__)
     load_dotenv()  # load contents from .env
 
-    app.config["API_TITLE"] = "IoT REST APi"
+    app.config["API_TITLE"] = "IoT REST API"
     app.config["API_VERSION"] = "v1"
     app.config["OPENAPI_VERSION"] = "3.0.3"
     app.config["OPENAPI_URL_PREFIX"] = "/"
