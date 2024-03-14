@@ -1,0 +1,3702 @@
+{
+	"info": {
+		"_postman_id": "768a481e-fcea-49fa-9704-b7aa753136e1",
+		"name": "REST API IoT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Add user (missing username)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(422);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unprocessable Entity\")\r",
+									"    pm.expect(jsonData.errors.headers.username[0]).to.equal(\"Missing data for required field.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.errors).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers.username).to.be.an(\"array\");\r",
+									"    pm.expect(jsonData.errors.headers.username[0]).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{usernameAdmin}}",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "{{passwordAdmin}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/user/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add user (missing password)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(422);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unprocessable Entity\")\r",
+									"    pm.expect(jsonData.errors.headers.password[0]).to.equal(\"Missing data for required field.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.errors).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers.password).to.be.an(\"array\");\r",
+									"    pm.expect(jsonData.errors.headers.password[0]).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{usernameAdmin}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{passwordAdmin}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{url}}/user/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add user (username exists)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 409 Conflict\", function () {\r",
+									"    pm.response.to.have.status(409);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(409);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Conflict\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"A user with that username already exists.\")\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{usernameAdmin}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{passwordAdmin}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/user/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add user (user added)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 409 Conflict\", function () {\r",
+									"    pm.response.to.have.status(409);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(409);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Conflict\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"A user with that username already exists.\")\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{newAdminUsername}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{newAdminPassword}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/user/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Registration",
+			"item": [
+				{
+					"name": "Registration (missing username)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(422);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unprocessable Entity\")\r",
+									"    pm.expect(jsonData.errors.headers.username[0]).to.equal(\"Missing data for required field.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.errors).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers.username).to.be.an(\"array\");\r",
+									"    pm.expect(jsonData.errors.headers.username[0]).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{newUsername}}",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "{{newPassword}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"serial_number\": \"5\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registration (missing password)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(422);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unprocessable Entity\")\r",
+									"    pm.expect(jsonData.errors.headers.password[0]).to.equal(\"Missing data for required field.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.errors).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers.password).to.be.an(\"array\");\r",
+									"    pm.expect(jsonData.errors.headers.password[0]).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{newUsername}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{newPassword}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"serial_number\": \"5\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registration (missing serial number)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(422);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unprocessable Entity\")\r",
+									"    pm.expect(jsonData.errors.json.serial_number[0]).to.equal(\"Missing data for required field.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.errors).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.json).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.json.serial_number).to.be.an(\"array\");\r",
+									"    pm.expect(jsonData.errors.json.serial_number[0]).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{newUsername}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{newPassword}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registration (existing serial number)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 409 Conflict\", function () {\r",
+									"    pm.response.to.have.status(409);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(409);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Conflict\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"Registration could not be completed due to a conflict. Serial number already exist.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{newUsername}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{newPassword}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"serial_number\": \"5\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registration (status was DELETED)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201 CREATED\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.equal(5);\r",
+									"    pm.expect(jsonData.serial_number).to.equal(\"4522\");\r",
+									"    pm.expect(jsonData.status).to.equal(\"CREATED\");\r",
+									"    pm.expect(jsonData.username).to.equal(\"stefan\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"id\");\r",
+									"    pm.expect(jsonData.id).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"serial_number\");\r",
+									"    pm.expect(jsonData.serial_number).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"username\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "username",
+								"value": "stefan",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "stefan",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"serial_number\": \"4522\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registration (device registred)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201 CREATED\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.equal(5);\r",
+									"    pm.expect(jsonData.serial_number).to.equal(\"4522\");\r",
+									"    pm.expect(jsonData.status).to.equal(\"CREATED\");\r",
+									"    pm.expect(jsonData.username).to.equal(\"stefan\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"id\");\r",
+									"    pm.expect(jsonData.id).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"serial_number\");\r",
+									"    pm.expect(jsonData.serial_number).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"username\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{newUsername}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{newPassword}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"serial_number\": \"1298\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Status (missing username)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(422);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unprocessable Entity\")\r",
+									"    pm.expect(jsonData.errors.headers.username[0]).to.equal(\"Missing data for required field.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.errors).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers.username).to.be.an(\"array\");\r",
+									"    pm.expect(jsonData.errors.headers.username[0]).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/status/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"status",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Status (missing password)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(422);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unprocessable Entity\")\r",
+									"    pm.expect(jsonData.errors.headers.password[0]).to.equal(\"Missing data for required field.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.errors).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers.password).to.be.an(\"array\");\r",
+									"    pm.expect(jsonData.errors.headers.password[0]).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/status/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"status",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Status (invalid ID)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404 Not Found\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(404);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Not Found\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"Device not found or invalid ID provided.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/status/89",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"status",
+								"89"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Status (invalid credentials)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 Unauthorized\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(401);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unauthorized\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"Invalid credentials.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "452",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/status/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"status",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Status (BLACKLISTED device)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403 Forbidden\", function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(403);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Forbidden\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"Access to the requested resource is forbidden.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "isidora",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "isidora",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/status/4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"status",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Status (CREATED, DELETED device)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.equal(3);\r",
+									"    pm.expect(jsonData.serial_number).to.equal(\"5\");\r",
+									"    pm.expect(jsonData.status).to.equal(\"CREATED\");\r",
+									"    pm.expect(jsonData.username).to.equal(\"anja\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"id\");\r",
+									"    pm.expect(jsonData.id).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"serial_number\");\r",
+									"    pm.expect(jsonData.serial_number).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"username\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "anja",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "anja",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/status/3",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"status",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Status (APPROVED device)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.device.id).to.equal(2);\r",
+									"    pm.expect(jsonData.device.serial_number).to.equal(\"2\");\r",
+									"    pm.expect(jsonData.device.status).to.equal(\"APPROVED\");\r",
+									"    pm.expect(jsonData.device.username).to.equal(\"dunja\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"access_token\");\r",
+									"    pm.expect(jsonData).to.have.property(\"device\");\r",
+									"\r",
+									"    jsonData = jsonData.device;\r",
+									"\r",
+									"    pm.expect(jsonData).to.have.property(\"id\");\r",
+									"    pm.expect(jsonData.id).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"serial_number\");\r",
+									"    pm.expect(jsonData.serial_number).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"username\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/status/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"status",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update (missing username)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(422);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unprocessable Entity\")\r",
+									"    pm.expect(jsonData.errors.headers.username[0]).to.equal(\"Missing data for required field.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.errors).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers.username).to.be.an(\"array\");\r",
+									"    pm.expect(jsonData.errors.headers.username[0]).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{usernameAdmin}}",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "{{passwordAdmin}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"device_id\":\"4\", \"status\": \"BLACKLISTED\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/update",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update (missing password)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(422);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unprocessable Entity\")\r",
+									"    pm.expect(jsonData.errors.headers.password[0]).to.equal(\"Missing data for required field.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.errors).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers.password).to.be.an(\"array\");\r",
+									"    pm.expect(jsonData.errors.headers.password[0]).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{usernameAdmin}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{passwordAdmin}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"device_id\":\"4\", \"status\": \"BLACKLISTED\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/update",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update (missing device_id)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(422);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unprocessable Entity\")\r",
+									"    pm.expect(jsonData.errors.json.device_id[0]).to.equal(\"Missing data for required field.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.errors).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.json).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.json.device_id).to.be.an(\"array\");\r",
+									"    pm.expect(jsonData.errors.json.device_id[0]).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{usernameAdmin}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{passwordAdmin}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"status\": \"BLACKLISTED\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/update",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update (missing status)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(422);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unprocessable Entity\")\r",
+									"    pm.expect(jsonData.errors.json.status[0]).to.equal(\"Missing data for required field.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.errors).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.json).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.json.status).to.be.an(\"array\");\r",
+									"    pm.expect(jsonData.errors.json.status[0]).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{usernameAdmin}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{passwordAdmin}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"device_id\":\"4\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/update",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update (invalid username)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404 Not Found\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(404);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Not Found\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"User not found or invalid username provided.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "username",
+								"value": "ad_min",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{passwordAdmin}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"device_id\":\"4\", \"status\": \"BLACKLISTED\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/update",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update (invalid password)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 Unauthorized\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(401);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unauthorized\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"Invalid password.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{usernameAdmin}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "ad_min",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"device_id\":\"4\", \"status\": \"BLACKLISTED\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/update",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update (invalid device ID)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404 Not Found\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(404);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Not Found\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"Device not found or invalid ID provided.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{usernameAdmin}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{passwordAdmin}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"device_id\":\"785123\", \"status\": \"APPROVED\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/update",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update (invalid status)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400 Bad Request\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(400);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Bad Request\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"Invalid device status provided.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{usernameAdmin}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{passwordAdmin}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"device_id\":\"4\", \"status\": \"BLOCK\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/update",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update (changed status)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.equal(5);\r",
+									"    pm.expect(jsonData.serial_number).to.equal(\"4522\");\r",
+									"    pm.expect(jsonData.username).to.equal(\"stefan\");\r",
+									"    pm.expect(jsonData.status).to.equal(\"CREATED\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"id\");\r",
+									"    pm.expect(jsonData.id).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"serial_number\");\r",
+									"    pm.expect(jsonData.serial_number).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"username\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{usernameAdmin}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{passwordAdmin}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"device_id\":\"5\", \"status\": \"CREATED\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/update",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete (missing username)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(422);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unprocessable Entity\")\r",
+									"    pm.expect(jsonData.errors.headers.username[0]).to.equal(\"Missing data for required field.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.errors).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers.username).to.be.an(\"array\");\r",
+									"    pm.expect(jsonData.errors.headers.username[0]).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/delete/5",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"delete",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete (missing password)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(422);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unprocessable Entity\")\r",
+									"    pm.expect(jsonData.errors.headers.password[0]).to.equal(\"Missing data for required field.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.errors).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers.password).to.be.an(\"array\");\r",
+									"    pm.expect(jsonData.errors.headers.password[0]).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/delete/5",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"delete",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete (invalid ID)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404 Not Found\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(404);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Not Found\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"Device not found or invalid ID provided.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/delete/89",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"delete",
+								"89"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete (invalid credentials)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 Unauthorized\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(401);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unauthorized\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"Invalid credentials.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "4528",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/delete/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"delete",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete (blacklisted device)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403 Forbidden\", function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(403);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Forbidden\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"Access to the requested resource is forbidden.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "username",
+								"value": "isidora",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "isidora",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/delete/4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"delete",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete (change status to DELETED)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.equal(5);\r",
+									"    pm.expect(jsonData.serial_number).to.equal(\"4522\");\r",
+									"    pm.expect(jsonData.status).to.equal(\"DELETED\")\r",
+									"    pm.expect(jsonData.username).to.equal(\"stefan\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"id\");\r",
+									"    pm.expect(jsonData.id).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"serial_number\");\r",
+									"    pm.expect(jsonData.serial_number).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"username\");\r",
+									"    pm.expect(jsonData.username).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "username",
+								"value": "stefan",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "stefan",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/delete/5",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"delete",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete (deleted device)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403 Forbidden\", function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(403);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Forbidden\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"Device is already deleted.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "username",
+								"value": "stefan",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "stefan",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/delete/5",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"delete",
+								"5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Login (missing username)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(422);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unprocessable Entity\")\r",
+									"    pm.expect(jsonData.errors.headers.username[0]).to.equal(\"Missing data for required field.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.errors).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers.username).to.be.an(\"array\");\r",
+									"    pm.expect(jsonData.errors.headers.username[0]).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/login/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"login",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login (missing password)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(422);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unprocessable Entity\")\r",
+									"    pm.expect(jsonData.errors.headers.password[0]).to.equal(\"Missing data for required field.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.errors).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers.password).to.be.an(\"array\");\r",
+									"    pm.expect(jsonData.errors.headers.password[0]).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/login/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"login",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login (invalid ID)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404 Not Found\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(404);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Not Found\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"Device not found or invalid ID provided.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/login/89",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"login",
+								"89"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login (invalid username)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 Unauthorized\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(401);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unauthorized\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"Invalid credentials.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "dunJa",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/login/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"login",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login (invalid password)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 Unauthorized\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(401);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unauthorized\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"Invalid credentials.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "542",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/login/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"login",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login (status CREATED)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.equal(3);\r",
+									"    pm.expect(jsonData.serial_number).to.equal(\"5\");\r",
+									"    pm.expect(jsonData.status).to.equal(\"CREATED\")\r",
+									"    pm.expect(jsonData.username).to.equal(\"anja\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"id\");\r",
+									"    pm.expect(jsonData.id).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"serial_number\");\r",
+									"    pm.expect(jsonData.serial_number).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"username\");\r",
+									"    pm.expect(jsonData.username).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "anja",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "anja",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/login/3",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"login",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login (status BLACKLISTED)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403 Forbidden\", function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(403);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Forbidden\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"Access to the requested resource is forbidden.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "isidora",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "isidora",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/login/4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"login",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login (status DELETED)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 Unauthorized\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(401);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unauthorized\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"The device cannot be logged in because the account has been deleted. Please register again.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "stefan",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "stefan",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/login/5",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"login",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login (status APPROVED)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.device.id).to.equal(2);\r",
+									"    pm.expect(jsonData.device.serial_number).to.equal(\"2\");\r",
+									"    pm.expect(jsonData.device.status).to.equal(\"APPROVED\");\r",
+									"    pm.expect(jsonData.device.username).to.equal(\"dunja\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"access_token\");\r",
+									"    pm.expect(jsonData).to.have.property(\"device\");\r",
+									"\r",
+									"    jsonData = jsonData.device;\r",
+									"\r",
+									"    pm.expect(jsonData).to.have.property(\"id\");\r",
+									"    pm.expect(jsonData.id).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"serial_number\");\r",
+									"    pm.expect(jsonData.serial_number).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"username\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/login/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"login",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Data",
+			"item": [
+				{
+					"name": "Insert data (missing token)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 Unauthorized\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.error).to.equal(\"authorization_required\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"Request does not contain an access token.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"error\");\r",
+									"    pm.expect(jsonData.error).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"value\":\"11\", \"unit\":\"Celsius\",\"name\": \"Temperature\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/data",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert data (invalid token)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 Unauthorized\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.error).to.equal(\"invalid_token\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"Signature verification failed.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"error\");\r",
+									"    pm.expect(jsonData.error).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVjaCI6ZmFsc2UsImlhdCI6MTcxMDQxMjQyMSwianRpIjoiM2NhNTFkNDUtZTE3Yi00NGU0LWIxNjAtMDEyZWNlOWI4ZWViIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MiwibmJmIjoxNzEwNDEyNDIxLCJjc3JmIjoiNzQ4NmQ3MzYtY2QyYS00NzQ2LWI0ODUtNmIwNGJkM2JhYjczIiwiZXhwIjoxNzEwNDEzMzIxfQ.h65REzJPFskmx9vDLBvDho2EyUo1pzXp7nRObAwk3jY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"value\":\"11\", \"unit\":\"Celsius\",\"name\": \"Temperature\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/data",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert data (expired token) Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 Unauthorized\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.error).to.equal(\"token_expired\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"The token has expired.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"error\");\r",
+									"    pm.expect(jsonData.error).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDQxMjQyMSwianRpIjoiM2NhNTFkNDUtZTE3Yi00NGU0LWIxNjAtMDEyZWNlOWI4ZWViIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MiwibmJmIjoxNzEwNDEyNDIxLCJjc3JmIjoiNzQ4NmQ3MzYtY2QyYS00NzQ2LWI0ODUtNmIwNGJkM2JhYjczIiwiZXhwIjoxNzEwNDEzMzIxfQ.h65REzJPFskmx9vDLBvDho2EyUo1pzXp7nRObAwk3jY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"value\":\"10\", \"unit\":\"Celsius\",\"name\": \"Temperature\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/data",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert data (data added)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201 CREATED\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.message).to.equal(\"New data added successfully.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{valid_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"value\":\"13\", \"unit\":\"Celsius\",\"name\": \"Temperature\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/data",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert data (missing name)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(422);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unprocessable Entity\")\r",
+									"    pm.expect(jsonData.errors.json.name[0]).to.equal(\"Missing data for required field.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.errors).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.json).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.json.name).to.be.an(\"array\");\r",
+									"    pm.expect(jsonData.errors.json.name[0]).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{valid_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"value\":\"11\", \"unit\":\"Celisus\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/data",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert data (missing unit)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(422);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unprocessable Entity\")\r",
+									"    pm.expect(jsonData.errors.json.unit[0]).to.equal(\"Missing data for required field.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.errors).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.json).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.json.unit).to.be.an(\"array\");\r",
+									"    pm.expect(jsonData.errors.json.unit[0]).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{valid_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"value\":\"11\", \"name\":\"Temperature\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/data",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert data (missing value)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(422);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unprocessable Entity\")\r",
+									"    pm.expect(jsonData.errors.json.value[0]).to.equal(\"Missing data for required field.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.errors).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.json).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.json.value).to.be.an(\"array\");\r",
+									"    pm.expect(jsonData.errors.json.value[0]).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{valid_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\":\"Temperature\", \"unit\":\"Celisus\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/data",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"data"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
