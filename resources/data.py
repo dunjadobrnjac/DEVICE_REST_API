@@ -18,6 +18,7 @@ blp = Blueprint("data", __name__, description="Endpoint for receiving data.")
 class DataResource(MethodView):
     @jwt_required()
     @blp.arguments(DataSchema)
+    @blp.response(201, description="New data added successfully.")
     def post(self, data_payload):
         device_id = get_jwt_identity()
 
@@ -44,4 +45,4 @@ class DataResource(MethodView):
         db.session.add(new_data)
         db.session.commit()
 
-        return jsonify(message="New data added successfully"), 201
+        return jsonify(message="New data added successfully."), 201
