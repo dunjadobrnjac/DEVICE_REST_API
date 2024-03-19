@@ -1,12 +1,17 @@
 # REST API for IoT devices
 
-## Setup Instructions
-
-### Install Dependencies
-To install all the required dependencies, use the following command:
+## Cloning the Project
+To clone this project from GitHub, use the following command:
 ```bash
-pip install -r requirements.txt
+git clone <repository_url>
 ```
+
+## Database Setup
+Before running the project, you need to install a database (e.g., PostgreSQL) on your local machine or server. After installation, configure the database instance to obtain the database connection URL, typically in the format of postgresql://username:password@localhost:5432/database_name, which you'll use in your project configuration.
+
+Instead, you can create an account on ElephantSQL's platform and provision a new database instance there. Once you've done that, you'll obtain the database connection URL from ElephantSQL, which you'll use in your project configuration.
+
+## Setup Instructions
 
 ### Environment Setup
 1. Create a `.env` file in the root directory.
@@ -59,9 +64,61 @@ To run the script, execute the following command:
 python generate_secret_key.py
 ```
 
+### Install Dependencies
+To install all the required dependencies, use the following command:
+```bash
+pip install -r requirements.txt
+```
+
+### Database Model Definition
+The database model is defined using SQLAlchemy. To create the required tables in the database, execute the following command:
+```bash
+flask db upgrade
+```
+
 ## Running the Application
 After generating the JWT secret key, you can run the application. Execute the following command:
 ```bash
 flask run
 ```
 (Note: Starting the application will not be possible if the JWT key is not defined in the `.env` file.)
+
+## Developer's Guide
+
+1. Clone Project:
+- Use git clone <repository_url> to download the project from GitHub.
+
+2. Database Setup:
+- Install a database (e.g., PostgreSQL).
+- Configure the database connection URL.
+- Alternatively, use ElephantSQL for a hosted database solution.
+
+3. Environment Setup:
+- Create a .env file with DATABASE_URL and JWT_KEY.
+- Generate JWT secret key using generate_secret_key.py script.
+
+4. Install Dependencies:
+- Run pip install -r requirements.txt to install required dependencies.
+
+5. Database Model:
+- Execute flask db upgrade for database migration.
+
+6. Run Application:
+- Start the application with flask run.
+
+
+## Testing
+
+### Running Tests with Postman
+
+To run the tests for this project using Postman, follow these steps:
+
+1. **Install Postman**: Make sure you have Postman installed on your computer. Postman is a free tool used for API development and testing.
+
+2. **Load Tests into Postman**: After installing Postman, import the tests from the `test/postman` folder in this project. To do this, open Postman, click on the `Import` button in the top-left corner, choose the file with the tests, and click `Import`.
+
+3. **Load Postman Environment**: Also import the Postman environment from the `test/postman` folder. Click on the `Manage Environments` button in Postman, then `Import`, choose the environment file, and click `Import`.
+
+4. **Run the Tests**: Once the tests and environment are loaded, select the collection of tests you want to run from the left sidebar in Postman. Then, click the `Run` button to execute the tests. Postman will run all tests in the collection using the defined environment variables.
+
+After running the tests, you'll receive the test results within Postman, showing which tests passed and which failed, along with details for each test.
