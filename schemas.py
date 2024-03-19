@@ -25,7 +25,7 @@ class DeviceSchema(Schema):
     status = EnumField(DeviceStatus, required=True)
 
 
-class DeviceLoginSchema(Schema):
+class DeviceTokenSchema(Schema):
     access_token = fields.String(required=True)
     device = fields.Nested(DeviceSchema)
 
@@ -37,7 +37,12 @@ class DataSchema(Schema):
     time = fields.DateTime()
 
 
-class UserRegistrationSchema(Schema):
+class UserSchema(Schema):
     id = fields.Integer(dump_only=True)
     username = fields.String(required=True)
     password = fields.String(load_only=True)
+
+
+class UserLoginSchema(Schema):
+    access_token = fields.String(required=True)
+    user = fields.Nested(UserSchema)

@@ -1,7 +1,7 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from flask import jsonify
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from passlib.hash import pbkdf2_sha256
 
 from schemas import (
@@ -9,7 +9,7 @@ from schemas import (
     DeviceRegistrationSchema,
     RegistrationUpdateSchema,
     DeviceSchema,
-    DeviceLoginSchema,
+    DeviceTokenSchema,
 )
 
 from models import DeviceModel, DeviceStatus, UserModel
@@ -22,13 +22,13 @@ blp = Blueprint(
 )
 
 device_schema = DeviceSchema()
-login_schema = DeviceLoginSchema()
+login_schema = DeviceTokenSchema()
 
 
 @blp.route("/auth/login/<int:id>")
 class Login(MethodView):
     @blp.arguments(HeaderSchema, location="headers")
-    @blp.response(200, DeviceLoginSchema)
+    @blp.response(200, DeviceTokenSchema)
     def get(self, header_data, id):
         username = header_data.get("username")
         password = header_data.get("password")
@@ -43,10 +43,6 @@ class Login(MethodView):
             abort(401, message="Invalid credentials.")
 
         if device.status != DeviceStatus.APPROVED:
-            if device.status == DeviceStatus.CREATED:
-                device_json = device_schema.dump(device)
-                return jsonify(device_json), 200
-
             if device.status == DeviceStatus.BLACKLISTED:
                 abort(403, message="Access to the requested resource is forbidden.")
 
@@ -57,10 +53,7 @@ class Login(MethodView):
                     "Please register again.",
                 )
 
-        # expires = datetime.utcnow() + timedelta(hours=256)
-        access_token = create_access_token(
-            identity=device.id
-        )  # dodati timestamp i expires_delta=expires
+        access_token = create_access_token(identity=device.id)
 
         response = login_schema.dump({"access_token": access_token, "device": device})
 
@@ -71,7 +64,7 @@ class Login(MethodView):
 class Registration(MethodView):
     @blp.arguments(HeaderSchema, location="headers")
     @blp.arguments(DeviceRegistrationSchema, location="json")
-    @blp.response(201, DeviceSchema)
+    @blp.response(201, DeviceTokenSchema)
     def post(self, header_data, payload_data):
         username = header_data.get("username")
         password = header_data.get("password")
@@ -89,10 +82,16 @@ class Registration(MethodView):
 
             if device.status == DeviceStatus.DELETED:
                 device.status = DeviceStatus.CREATED
+                device.usermane = username
+                device.password = pbkdf2_sha256.hash(password)
                 db.session.commit()
 
-                device_json = device_schema.dump(device)
-                return jsonify(device_json), 201
+                access_token = create_access_token(identity=device.id)
+
+                response = login_schema.dump(
+                    {"access_token": access_token, "device": device}
+                )
+                return jsonify(response), 201
 
         new_device = DeviceModel(
             username=username,
@@ -103,28 +102,22 @@ class Registration(MethodView):
         db.session.add(new_device)
         db.session.commit()
 
-        device_json = device_schema.dump(new_device)
-        return jsonify(device_json), 201
+        access_token = create_access_token(identity=device.id)
+
+        response = login_schema.dump({"access_token": access_token, "device": device})
+        return jsonify(response), 201
 
 
-@blp.route("/auth/status/<int:id>")
+@blp.route("/auth/status")
 class RegistrationStatus(MethodView):
-    @blp.arguments(HeaderSchema, location="headers")
+    @jwt_required()
     @blp.response(200, DeviceSchema)
-    def get(self, header_data, id):
-        username = header_data.get("username")
-        password = header_data.get("password")
+    def get(self):
+        device_id = get_jwt_identity()
 
-        device = DeviceModel.query.get(id)
+        device = DeviceModel.query.get(device_id)
         if not device:
-            abort(404, message="Device not found or invalid ID provided.")
-
-        # device = DeviceModel.query.get_or_404(id)
-
-        if device.username != username or not pbkdf2_sha256.verify(
-            password, device.password
-        ):
-            abort(401, message="Invalid credentials.")
+            abort(404, message="Device not found.")
 
         if device.status != DeviceStatus.APPROVED:
             if device.status == DeviceStatus.BLACKLISTED:
@@ -141,22 +134,19 @@ class RegistrationStatus(MethodView):
 
 @blp.route("/auth/update")
 class RegistrationUpdate(MethodView):
-    @blp.arguments(HeaderSchema, location="headers")
+    @jwt_required()
     @blp.arguments(RegistrationUpdateSchema, location="json")
     @blp.response(200, DeviceSchema)
-    def patch(self, header_data, payload_data):
-        username = header_data.get("username")
-        password = header_data.get("password")
+    def patch(self, payload_data):
         new_status = payload_data.get("status")
         device_id = payload_data.get("device_id")
 
-        user = UserModel.query.filter_by(username=username).first()
+        user_id = get_jwt_identity()
+
+        user = UserModel.query.filter_by(id=user_id).first()
 
         if not user:
-            abort(404, message="User not found or invalid username provided.")
-
-        if not pbkdf2_sha256.verify(password, user.password):
-            abort(401, message="Invalid password.")
+            abort(404, message="User not found.")
 
         device = DeviceModel.query.get(device_id)
         if not device:
