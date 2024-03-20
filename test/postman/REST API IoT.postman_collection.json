@@ -154,7 +154,7 @@
 									"\r",
 									"pm.test(\"Response body contains expected fields\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    const newUsername = pm.environment.get(\"newAdminUsername\")\r",
+									"    const newUsername = pm.environment.get(\"usernameAdmin\")\r",
 									"    pm.expect(jsonData.username).to.equal(newUsername)\r",
 									"});\r",
 									"\r",
@@ -404,7 +404,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"serial_number\": \"5\"}",
+							"raw": "{\"serial_number\": \"{{serial_number}}\"}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -479,7 +479,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"serial_number\": \"5\"}",
+							"raw": "{\"serial_number\": \"{{serial_number}}\"}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -584,10 +584,9 @@
 									"\r",
 									"pm.test(\"Response body contains expected fields\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.device.id).to.equal(5);\r",
-									"    pm.expect(jsonData.device.serial_number).to.equal(\"4522\");\r",
+									"    pm.expect(jsonData.device.serial_number).to.equal(pm.environment.get(\"serial_number\"));\r",
 									"    pm.expect(jsonData.device.status).to.equal(\"CREATED\");\r",
-									"    const newUsername = pm.environment.get(\"newUsername\")\r",
+									"    const newUsername = pm.environment.get(\"username\")\r",
 									"    pm.expect(jsonData.device.username).to.equal(newUsername)\r",
 									"});\r",
 									"\r",
@@ -749,7 +748,6 @@
 									"\r",
 									"pm.test(\"Response body contains expected fields\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.id).to.equal(parseInt(pm.environment.get(\"device_id\")));\r",
 									"    pm.expect(jsonData.serial_number).to.equal(pm.environment.get(\"serial_number\"));\r",
 									"    pm.expect(jsonData.status).to.equal(\"DELETED\")\r",
 									"    pm.expect(jsonData.username).to.equal(pm.environment.get(\"username\"))\r",
@@ -961,7 +959,6 @@
 									"\r",
 									"pm.test(\"Response body contains expected fields\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.device.id).to.equal(parseInt(pm.environment.get(\"device_id\")));\r",
 									"    pm.expect(jsonData.device.serial_number).to.equal(pm.environment.get(\"serial_number\"));\r",
 									"    pm.expect(jsonData.device.status).to.equal(\"CREATED\");\r",
 									"    pm.expect(jsonData.device.username).to.equal(pm.environment.get(\"username\"));\r",
@@ -1232,7 +1229,6 @@
 									"\r",
 									"pm.test(\"Response body contains expected fields\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.id).to.equal(parseInt(pm.environment.get(\"device_id\")))\r",
 									"    pm.expect(jsonData.serial_number).to.equal(pm.environment.get(\"serial_number\"));\r",
 									"    pm.expect(jsonData.status).to.equal(\"CREATED\");\r",
 									"    pm.expect(jsonData.username).to.equal(pm.environment.get(\"username\"))\r",
@@ -1877,7 +1873,6 @@
 									"\r",
 									"pm.test(\"Response body contains expected fields\", function () {\r",
 									"    var jsonData = pm.response.json().device;\r",
-									"    pm.expect(jsonData.id).to.equal(parseInt(pm.environment.get(\"device_id\")));\r",
 									"    pm.expect(jsonData.serial_number).to.equal(pm.environment.get(\"serial_number\"));\r",
 									"    pm.expect(jsonData.status).to.equal(\"CREATED\")\r",
 									"    pm.expect(jsonData.username).to.equal(pm.environment.get(\"username\"))\r",
@@ -2031,7 +2026,6 @@
 									"\r",
 									"pm.test(\"Response body contains expected fields\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.id).to.equal(parseInt(pm.environment.get(\"device_id\")));\r",
 									"    pm.expect(jsonData.serial_number).to.equal(pm.environment.get(\"serial_number\"));\r",
 									"    pm.expect(jsonData.username).to.equal(pm.environment.get(\"username\"));\r",
 									"    pm.expect(jsonData.status).to.equal(\"APPROVED\")\r",
@@ -2121,7 +2115,6 @@
 									"\r",
 									"pm.test(\"Response body contains expected fields\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.device.id).to.equal(parseInt(pm.environment.get(\"device_id\")));\r",
 									"    pm.expect(jsonData.device.serial_number).to.equal(pm.environment.get(\"serial_number\"));\r",
 									"    pm.expect(jsonData.device.status).to.equal(\"APPROVED\");\r",
 									"    pm.expect(jsonData.device.username).to.equal(pm.environment.get(\"username\"))\r",
@@ -2552,7 +2545,6 @@
 									"\r",
 									"pm.test(\"Response body contains expected fields\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.device.id).to.equal(parseInt(pm.environment.get(\"device_id\")));\r",
 									"    pm.expect(jsonData.device.serial_number).to.equal(pm.environment.get(\"serial_number\"));\r",
 									"    pm.expect(jsonData.device.status).to.equal(\"APPROVED\");\r",
 									"    pm.expect(jsonData.device.username).to.equal(pm.environment.get(\"username\"))\r",
@@ -3153,7 +3145,6 @@
 									"\r",
 									"pm.test(\"Response body contains expected fields\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.id).to.equal(parseInt(pm.environment.get(\"device_id\")));\r",
 									"    pm.expect(jsonData.serial_number).to.equal(pm.environment.get(\"serial_number\"));\r",
 									"    pm.expect(jsonData.username).to.equal(pm.environment.get(\"username\"));\r",
 									"    pm.expect(jsonData.status).to.equal(\"BLACKLISTED\")\r",

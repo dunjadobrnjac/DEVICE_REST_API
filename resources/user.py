@@ -37,7 +37,7 @@ class Registration(MethodView):
         except SQLAlchemyError:
             abort(500, message="An error occured while inserting new user.")
 
-        response = user_reg.dump({"user": new_user})
+        response = user_reg.dump(new_user)
         return jsonify(response), 201
 
 
