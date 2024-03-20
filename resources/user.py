@@ -5,6 +5,8 @@ from flask_smorest import Blueprint, abort
 from flask import jsonify
 from passlib.hash import pbkdf2_sha256
 
+from sqlalchemy.exc import SQLAlchemyError
+
 from schemas import HeaderSchema, UserLoginSchema, UserSchema
 
 from models import UserModel
@@ -29,8 +31,11 @@ class Registration(MethodView):
             abort(409, message="A user with that username already exists.")
 
         new_user = UserModel(username=username, password=pbkdf2_sha256.hash(password))
-        db.session.add(new_user)
-        db.session.commit()
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+        except SQLAlchemyError:
+            abort(500, message="An error occured while inserting new user.")
 
         response = user_reg.dump({"user": new_user})
         return jsonify(response), 201
