@@ -2,7 +2,7 @@ from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from flask import jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-
+from sqlalchemy.exc import SQLAlchemyError
 from schemas import DataSchema
 
 from models import DataModel, DataType, DeviceModel, DeviceStatus
@@ -37,8 +37,11 @@ class DataResource(MethodView):
         data_type = DataType.query.filter_by(name=name, unit=unit).first()
         if not data_type:
             data_type = DataType(name=name, unit=unit)
-            db.session.add(data_type)
-            db.session.commit()
+            try:
+                db.session.add(data_type)
+                db.session.commit()
+            except SQLAlchemyError:
+                abort(500, message="An error occured while inserting new data type.")
 
         if time is None:
             time = datetime.utcnow()
@@ -49,7 +52,10 @@ class DataResource(MethodView):
             data_type_id=data_type.id,
             device_id=device_id,
         )
-        db.session.add(new_data)
-        db.session.commit()
+        try:
+            db.session.add(new_data)
+            db.session.commit()
+        except SQLAlchemyError:
+            abort(500, message="An error occured while inserting new data.")
 
         return jsonify(message="New data added successfully."), 201

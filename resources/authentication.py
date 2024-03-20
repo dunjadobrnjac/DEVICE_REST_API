@@ -3,6 +3,7 @@ from flask_smorest import Blueprint, abort
 from flask import jsonify
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from passlib.hash import pbkdf2_sha256
+from sqlalchemy.exc import SQLAlchemyError
 
 from schemas import (
     HeaderSchema,
@@ -84,7 +85,10 @@ class Registration(MethodView):
                 device.status = DeviceStatus.CREATED
                 device.usermane = username
                 device.password = pbkdf2_sha256.hash(password)
-                db.session.commit()
+                try:
+                    db.session.commit()
+                except SQLAlchemyError:
+                    abort(500, message="An error occured while updating device.")
 
                 access_token = create_access_token(identity=device.id)
 
@@ -99,12 +103,17 @@ class Registration(MethodView):
             serial_number=serial_number,
             status=DeviceStatus.CREATED,
         )
-        db.session.add(new_device)
-        db.session.commit()
+        try:
+            db.session.add(new_device)
+            db.session.commit()
+        except SQLAlchemyError:
+            abort(500, message="An error occured while inserting new device.")
 
-        access_token = create_access_token(identity=device.id)
+        access_token = create_access_token(identity=new_device.id)
 
-        response = login_schema.dump({"access_token": access_token, "device": device})
+        response = login_schema.dump(
+            {"access_token": access_token, "device": new_device}
+        )
         return jsonify(response), 201
 
 
@@ -159,6 +168,8 @@ class RegistrationUpdate(MethodView):
             return jsonify(device_json), 200
         except KeyError:
             abort(400, message="Invalid device status provided.")
+        except SQLAlchemyError:
+            abort(500, message="An error occured while updating device.")
 
 
 @blp.route("/auth/delete/<int:id>")
@@ -185,7 +196,10 @@ class DeleteRegistration(MethodView):
             abort(403, message="Device is already deleted.")
 
         device.status = DeviceStatus.DELETED
-        db.session.commit()
+        try:
+            db.session.commit()
+        except SQLAlchemyError:
+            abort(500, message="An error occured while updating device.")
 
         device_json = device_schema.dump(device)
         return jsonify(device_json), 200
