@@ -1,3 +1,4 @@
+from datetime import timedelta
 import os
 from flask import Flask, jsonify
 from flask_smorest import Api
@@ -38,9 +39,8 @@ def create_app():
     migrate = Migrate(app, db)
 
     # jwt configuration
-    # koristena komanda secrets.SystemRandom().getrandbits(256)
-    # kljuc nece ostati ovde
-    app.config["JWT_SECRET_KEY"] = os.getenv("JWT_KEY", "secret")
+    app.config["JWT_SECRET_KEY"] = os.getenv("JWT_KEY")
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=365)
     jwt = JWTManager(app)
 
     @jwt.expired_token_loader

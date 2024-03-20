@@ -1,11 +1,11 @@
 from flask.views import MethodView
-from flask_smorest import Blueprint
+from flask_smorest import Blueprint, abort
 from flask import jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from schemas import DataSchema
 
-from models import DataModel, DataType
+from models import DataModel, DataType, DeviceModel, DeviceStatus
 from db import db
 
 from datetime import datetime
@@ -21,6 +21,13 @@ class DataResource(MethodView):
     @blp.response(201, description="New data added successfully.")
     def post(self, data_payload):
         device_id = get_jwt_identity()
+
+        device = DeviceModel.query.filter_by(id=device_id).first()
+        if not device:
+            abort(404, message="Device not found.")
+
+        if device.status != DeviceStatus.APPROVED:
+            abort(403, message="Access to the requested resource is forbidden.")
 
         value = data_payload.get("value")
         name = data_payload.get("name")
