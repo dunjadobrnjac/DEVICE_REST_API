@@ -122,3 +122,23 @@ To run the tests for this project using Postman, follow these steps:
 4. **Run the Tests**: Once the tests and environment are loaded, select the collection of tests you want to run from the left sidebar in Postman. Then, click the `Run` button to execute the tests. Postman will run all tests in the collection using the defined environment variables.
 
 After running the tests, you'll receive the test results within Postman, showing which tests passed and which failed, along with details for each test.
+
+### Running tests with Newman
+
+#### Prerequisites
+- Install `newman` following instructions from [here](https://learning.postman.com/fdocs/running-collections/using-newman-cli/command-line-integration-with-newman/)
+#### Execute testing locally
+- run (application): `flask run`
+- run (tests): 
+
+```
+cd test
+./postman.bat
+```
+
+or 
+
+```
+cd test
+./postman.sh
+```
