@@ -222,3 +222,41 @@ class DeleteRegistration(MethodView):
             abort(500, message="Error connecting to the database.")
         except SQLAlchemyError:
             abort(500, message="An error occurred while accessing the database.")
+
+
+@blp.route("/devices/all")
+class AllDevices(MethodView):
+    @jwt_required()
+    @blp.response(200, DeviceSchema(many=True))
+    def get(self):
+        user_id = get_jwt_identity()
+
+        try:
+            user = UserModel.query.get(user_id)
+            if not user:
+                abort(403, message="Access to the requested resource is forbidden.")
+
+            return DeviceModel.query.all()
+        except OperationalError:
+            abort(500, message="Error connecting to the database.")
+        except SQLAlchemyError:
+            abort(500, message="An error occurred while accessing the database.")
+
+
+@blp.route("/devices/requests")
+class DevicesRequests(MethodView):
+    @jwt_required()
+    @blp.response(200, DeviceSchema(many=True))
+    def get(self):
+        user_id = get_jwt_identity()
+
+        try:
+            user = UserModel.query.get(user_id)
+            if not user:
+                abort(403, message="Access to the requested resource is forbidden.")
+
+            return DeviceModel.query.filter_by(status=DeviceStatus.CREATED).all()
+        except OperationalError:
+            abort(500, message="Error connecting to the database.")
+        except SQLAlchemyError:
+            abort(500, message="An error occurred while accessing the database.")

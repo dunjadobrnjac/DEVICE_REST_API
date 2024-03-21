@@ -273,7 +273,139 @@
 					"response": []
 				},
 				{
-					"name": "Add user (user logged in)",
+					"name": "Login user (missing username)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(422);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unprocessable Entity\")\r",
+									"    pm.expect(jsonData.errors.headers.username[0]).to.equal(\"Missing data for required field.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.errors).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers.username).to.be.an(\"array\");\r",
+									"    pm.expect(jsonData.errors.headers.username[0]).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "password",
+								"value": "{{passwordAdmin}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/user/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login user (missing password)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(422);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unprocessable Entity\")\r",
+									"    pm.expect(jsonData.errors.headers.password[0]).to.equal(\"Missing data for required field.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.errors).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.errors.headers.password).to.be.an(\"array\");\r",
+									"    pm.expect(jsonData.errors.headers.password[0]).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{usernameAdmin}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/user/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login user (user logged in)",
 					"event": [
 						{
 							"listen": "test",
@@ -339,6 +471,608 @@
 							"path": [
 								"user",
 								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login user (user not found)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404 Not Found\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(404);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Not Found\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"A user with that username not found.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "da_ni89",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{passwordAdmin}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/user/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login user (invalid credentials)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 Unauthorized\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(401);\r",
+									"    pm.expect(jsonData.status).to.equal(\"Unauthorized\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"Invalid credentials.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"code\");\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\");\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{usernameAdmin}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "da_ni89",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/user/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Devices List",
+			"item": [
+				{
+					"name": "All device (missing token)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 Unauthorized\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.error).to.equal(\"authorization_required\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"Request does not contain an access token.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"error\");\r",
+									"    pm.expect(jsonData.error).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/devices/all",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"devices",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Device requests (missing token)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 Unauthorized\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.error).to.equal(\"authorization_required\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"Request does not contain an access token.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"error\");\r",
+									"    pm.expect(jsonData.error).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/devices/requests",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"devices",
+								"requests"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All device (invalid token)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 Unauthorized\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.error).to.equal(\"invalid_token\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"Signature verification failed.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"error\");\r",
+									"    pm.expect(jsonData.error).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVjaCI6ZmFsc2UsImlhdCI6MTcxMDQxMjQyMSwianRpIjoiM2NhNTFkNDUtZTE3Yi00NGU0LWIxNjAtMDEyZWNlOWI4ZWViIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MiwibmJmIjoxNzEwNDEyNDIxLCJjc3JmIjoiNzQ4NmQ3MzYtY2QyYS00NzQ2LWI0ODUtNmIwNGJkM2JhYjczIiwiZXhwIjoxNzEwNDEzMzIxfQ.h65REzJPFskmx9vDLBvDho2EyUo1pzXp7nRObAwk3jY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/devices/all",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"devices",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Device requests (invalid token)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 Unauthorized\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.error).to.equal(\"invalid_token\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"Signature verification failed.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"error\");\r",
+									"    pm.expect(jsonData.error).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVjaCI6ZmFsc2UsImlhdCI6MTcxMDQxMjQyMSwianRpIjoiM2NhNTFkNDUtZTE3Yi00NGU0LWIxNjAtMDEyZWNlOWI4ZWViIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MiwibmJmIjoxNzEwNDEyNDIxLCJjc3JmIjoiNzQ4NmQ3MzYtY2QyYS00NzQ2LWI0ODUtNmIwNGJkM2JhYjczIiwiZXhwIjoxNzEwNDEzMzIxfQ.h65REzJPFskmx9vDLBvDho2EyUo1pzXp7nRObAwk3jY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/devices/requests",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"devices",
+								"requests"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All device (expired token)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 Unauthorized\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.error).to.equal(\"token_expired\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"The token has expired.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"error\");\r",
+									"    pm.expect(jsonData.error).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDQxMjQyMSwianRpIjoiM2NhNTFkNDUtZTE3Yi00NGU0LWIxNjAtMDEyZWNlOWI4ZWViIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MiwibmJmIjoxNzEwNDEyNDIxLCJjc3JmIjoiNzQ4NmQ3MzYtY2QyYS00NzQ2LWI0ODUtNmIwNGJkM2JhYjczIiwiZXhwIjoxNzEwNDEzMzIxfQ.h65REzJPFskmx9vDLBvDho2EyUo1pzXp7nRObAwk3jY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/devices/all",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"devices",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Device requests (expired token)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 Unauthorized\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains expected fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.error).to.equal(\"token_expired\");\r",
+									"    pm.expect(jsonData.message).to.equal(\"The token has expired.\")\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"error\");\r",
+									"    pm.expect(jsonData.error).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDQxMjQyMSwianRpIjoiM2NhNTFkNDUtZTE3Yi00NGU0LWIxNjAtMDEyZWNlOWI4ZWViIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MiwibmJmIjoxNzEwNDEyNDIxLCJjc3JmIjoiNzQ4NmQ3MzYtY2QyYS00NzQ2LWI0ODUtNmIwNGJkM2JhYjczIiwiZXhwIjoxNzEwNDEzMzIxfQ.h65REzJPFskmx9vDLBvDho2EyUo1pzXp7nRObAwk3jY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/devices/requests",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"devices",
+								"requests"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All device (get devices)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/devices/all",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"devices",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Device requests (get devices)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/devices/requests",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"devices",
+								"requests"
 							]
 						}
 					},
