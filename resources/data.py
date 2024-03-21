@@ -2,7 +2,7 @@ from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from flask import jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.exc import SQLAlchemyError, OperationalError
 from schemas import DataSchema
 
 from models import DataModel, DataType, DeviceModel, DeviceStatus
@@ -22,40 +22,40 @@ class DataResource(MethodView):
     def post(self, data_payload):
         device_id = get_jwt_identity()
 
-        device = DeviceModel.query.filter_by(id=device_id).first()
-        if not device:
-            abort(404, message="Device not found.")
+        try:
+            device = DeviceModel.query.filter_by(id=device_id).first()
+            if not device:
+                abort(404, message="Device not found.")
 
-        if device.status != DeviceStatus.APPROVED:
-            abort(403, message="Access to the requested resource is forbidden.")
+            if device.status != DeviceStatus.APPROVED:
+                abort(403, message="Access to the requested resource is forbidden.")
 
-        value = data_payload.get("value")
-        name = data_payload.get("name")
-        unit = data_payload.get("unit")
-        time = data_payload.get("time")
+            value = data_payload.get("value")
+            name = data_payload.get("name")
+            unit = data_payload.get("unit")
+            time = data_payload.get("time")
 
-        data_type = DataType.query.filter_by(name=name, unit=unit).first()
-        if not data_type:
-            data_type = DataType(name=name, unit=unit)
-            try:
+            data_type = DataType.query.filter_by(name=name, unit=unit).first()
+            if not data_type:
+                data_type = DataType(name=name, unit=unit)
                 db.session.add(data_type)
                 db.session.commit()
-            except SQLAlchemyError:
-                abort(500, message="An error occured while inserting new data type.")
 
-        if time is None:
-            time = datetime.utcnow()
+            if time is None:
+                time = datetime.utcnow()
 
-        new_data = DataModel(
-            generated_value=value,
-            generation_time=time,
-            data_type_id=data_type.id,
-            device_id=device_id,
-        )
-        try:
+            new_data = DataModel(
+                generated_value=value,
+                generation_time=time,
+                data_type_id=data_type.id,
+                device_id=device_id,
+            )
+
             db.session.add(new_data)
             db.session.commit()
-        except SQLAlchemyError:
-            abort(500, message="An error occured while inserting new data.")
 
-        return jsonify(message="New data added successfully."), 201
+            return jsonify(message="New data added successfully."), 201
+        except OperationalError:
+            abort(500, message="Error connecting to the database.")
+        except SQLAlchemyError:
+            abort(500, message="An error occurred while accessing the database.")
