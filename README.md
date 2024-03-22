@@ -128,17 +128,27 @@ After running the tests, you'll receive the test results within Postman, showing
 #### Prerequisites
 - Install `newman` following instructions from [here](https://learning.postman.com/fdocs/running-collections/using-newman-cli/command-line-integration-with-newman/)
 #### Execute testing locally
-- run (application): `flask run`
-- run (tests): 
-
-```
-cd test
-./postman.bat
-```
-
-or 
-
-```
-cd test
-./postman.sh
-```
+- run (test application) on separate terminal, either of scripts: 
+   ```commandline
+   test_run.bat
+   ```
+   or
+   ```bash
+   test_run.sh
+   ```
+   or
+   ```powerShell
+   test_run.ps1
+   ```
+- run (tests) on other terminal, depending on the terminal:
+   ```commandline
+   cd test
+   ./postman.bat
+   ```
+   
+   or 
+   
+   ```shell
+   cd test
+   ./postman.sh
+   ```
