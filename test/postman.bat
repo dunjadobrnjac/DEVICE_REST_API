@@ -1,0 +1,1 @@
+newman run ./postman/"REST API IoT.postman_collection.json" -e ./postman/"IoTRestApi.postman_environment.json" --bail

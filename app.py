@@ -71,6 +71,30 @@ def create_app():
             401,
         )
 
+    def kill_function():
+        # it will kill server after few seconds waiting for responding
+        import signal
+        from time import sleep
+        sleep(2)
+        os.kill(os.getpid(), signal.SIGINT)
+
+    @app.route('/shutdown', methods=['GET'])
+    def shutdown():
+        # TODO: enable only for admin
+        # TODO: enable only when debugging
+        # TODO: resolve
+        from threading import Thread
+        print(' * Shutting down Flask app...')
+        # will create and start thread that will kill the server
+        thread = Thread(target=kill_function,)
+        thread.start()
+        return (
+            jsonify(
+                {"message": "Shutting down Flask app...."}
+            ),
+            200,
+        )
+
     api.register_blueprint(AuthBlueprint)
     api.register_blueprint(UserBlueprint)
     api.register_blueprint(DataBlueprint)
