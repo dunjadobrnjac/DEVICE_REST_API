@@ -1,0 +1,29 @@
+name: Newman Integration Tests
+
+on:
+  pull_request:
+    branches:
+      - master
+      - dev
+  push:
+    branches:
+      - master
+      - dev
+  workflow_dispatch:
+
+jobs:
+  newman:
+    name: Newman Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip' # caching pip dependencies
+      - run: pip install -r requirements.txt
+      - run: test_run.sh
+      - uses: matt-ball/newman-action@master
+        with:
+          collection: ./test/postman/REST API IoT.postman_collection.json
+          environment: ./test/postman/IoTRestApi.postman_environment.json
