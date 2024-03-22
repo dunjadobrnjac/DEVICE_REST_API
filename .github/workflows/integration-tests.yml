@@ -23,8 +23,9 @@ jobs:
           cache: 'pip' # caching pip dependencies
       - run: pip install -r requirements.txt
       - run: |
-          chmod +x "${GITHUB_WORKSPACE}/test_run.sh"
-          "sudo ${GITHUB_WORKSPACE}/test_run.sh"
+          cd "${GITHUB_WORKSPACE}"
+          chmod +x "./test_run.sh"
+          "sudo ./test_run.sh"
       - uses: matt-ball/newman-action@master
         with:
           collection: ./test/postman/REST API IoT.postman_collection.json
