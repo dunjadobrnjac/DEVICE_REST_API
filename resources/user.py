@@ -5,7 +5,7 @@ from flask_smorest import Blueprint, abort
 from flask import jsonify
 from passlib.hash import pbkdf2_sha256
 
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.exc import SQLAlchemyError, OperationalError
 
 from schemas import HeaderSchema, UserLoginSchema, UserSchema
 
@@ -26,18 +26,22 @@ class Registration(MethodView):
         username = header_data.get("username")
         password = header_data.get("password")
 
-        user = UserModel.query.filter_by(username=username).first()
-        if user:
-            abort(409, message="A user with that username already exists.")
-
-        new_user = UserModel(username=username, password=pbkdf2_sha256.hash(password))
         try:
+            user = UserModel.query.filter_by(username=username).first()
+            if user:
+                abort(409, message="A user with that username already exists.")
+
+            new_user = UserModel(
+                username=username, password=pbkdf2_sha256.hash(password)
+            )
+
             db.session.add(new_user)
             db.session.commit()
+        except OperationalError:
+            abort(500, message="Error connecting to the database.")
         except SQLAlchemyError:
-            abort(500, message="An error occured while inserting new user.")
-
-        response = user_reg.dump({"user": new_user})
+            abort(500, message="An error occurred while accessing the database.")
+        response = user_reg.dump(new_user)
         return jsonify(response), 201
 
 
@@ -49,15 +53,20 @@ class Login(MethodView):
         username = header_data.get("username")
         password = header_data.get("password")
 
-        user = UserModel.query.filter_by(username=username).first()
-        if not user:
-            abort(404, message="A user with that username not found.")
+        try:
+            user = UserModel.query.filter_by(username=username).first()
+            if not user:
+                abort(404, message="A user with that username not found.")
 
-        if not pbkdf2_sha256.verify(password, user.password):
-            abort(401, message="Invalid credentials.")
+            if not pbkdf2_sha256.verify(password, user.password):
+                abort(401, message="Invalid credentials.")
 
-        access_token = create_access_token(
-            identity=user.id, expires_delta=timedelta(minutes=30)
-        )
-        response = user_schema.dump({"access_token": access_token, "user": user})
-        return jsonify(response), 200
+            access_token = create_access_token(
+                identity=user.id, expires_delta=timedelta(minutes=30)
+            )
+            response = user_schema.dump({"access_token": access_token, "user": user})
+            return jsonify(response), 200
+        except OperationalError:
+            abort(500, message="Error connecting to the database.")
+        except SQLAlchemyError:
+            abort(500, message="An error occurred while accessing the database.")
