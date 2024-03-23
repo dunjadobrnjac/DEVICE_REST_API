@@ -1,6 +1,6 @@
 from datetime import timedelta
 from flask.views import MethodView
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from flask_smorest import Blueprint, abort
 from flask import jsonify
 from passlib.hash import pbkdf2_sha256
@@ -66,6 +66,26 @@ class Login(MethodView):
             )
             response = user_schema.dump({"access_token": access_token, "user": user})
             return jsonify(response), 200
+        except OperationalError:
+            abort(500, message="Error connecting to the database.")
+        except SQLAlchemyError:
+            abort(500, message="An error occurred while accessing the database.")
+
+
+@blp.route("/user/delete")
+class Delete(MethodView):
+    @jwt_required()
+    def delete(self):
+        user_id = get_jwt_identity()
+        try:
+            user = AdminModel.query.get(user_id)
+            if not user:
+                abort(403, message="Access to the requested resource is forbidden.")
+
+            db.session.delete(user)
+            db.session.commit()
+
+            return jsonify(message="The user was successfully deleted."), 200
         except OperationalError:
             abort(500, message="Error connecting to the database.")
         except SQLAlchemyError:
