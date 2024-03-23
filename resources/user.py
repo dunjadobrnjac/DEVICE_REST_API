@@ -9,7 +9,7 @@ from sqlalchemy.exc import SQLAlchemyError, OperationalError
 
 from schemas import HeaderSchema, UserLoginSchema, UserSchema
 
-from models import UserModel
+from models import AdminModel
 from db import db
 
 blp = Blueprint("user", __name__, description="User registration")
@@ -27,12 +27,12 @@ class Registration(MethodView):
         password = header_data.get("password")
 
         try:
-            user = UserModel.query.filter_by(username=username).first()
+            user = AdminModel.query.filter_by(username=username).first()
             if user:
                 abort(409, message="A user with that username already exists.")
 
-            new_user = UserModel(
-                username=username, password=pbkdf2_sha256.hash(password)
+            new_user = AdminModel(
+                username=username, password=pbkdf2_sha256.hash(password), role="admin"
             )
 
             db.session.add(new_user)
@@ -54,7 +54,7 @@ class Login(MethodView):
         password = header_data.get("password")
 
         try:
-            user = UserModel.query.filter_by(username=username).first()
+            user = AdminModel.query.filter_by(username=username).first()
             if not user:
                 abort(404, message="A user with that username not found.")
 
