@@ -13,7 +13,7 @@ from schemas import (
     DeviceTokenSchema,
 )
 
-from models import DeviceModel, DeviceStatus, UserModel
+from models import DeviceModel, DeviceStatus, AdminModel
 from db import db
 
 
@@ -167,7 +167,7 @@ class RegistrationUpdate(MethodView):
         user_id = get_jwt_identity()
 
         try:
-            user = UserModel.query.filter_by(id=user_id).first()
+            user = AdminModel.query.filter_by(id=user_id).first()
 
             if not user:
                 abort(404, message="User not found.")
@@ -232,7 +232,7 @@ class AllDevices(MethodView):
         user_id = get_jwt_identity()
 
         try:
-            user = UserModel.query.get(user_id)
+            user = AdminModel.query.get(user_id)
             if not user:
                 abort(403, message="Access to the requested resource is forbidden.")
 
@@ -251,7 +251,7 @@ class DevicesRequests(MethodView):
         user_id = get_jwt_identity()
 
         try:
-            user = UserModel.query.get(user_id)
+            user = AdminModel.query.get(user_id)
             if not user:
                 abort(403, message="Access to the requested resource is forbidden.")
 
