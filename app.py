@@ -12,6 +12,8 @@ from resources import AuthBlueprint
 from resources import UserBlueprint
 from resources import DataBlueprint
 
+from models import TokenBlocklist
+
 
 def create_app():
     app = Flask(__name__)
@@ -67,6 +69,21 @@ def create_app():
                     "message": "Request does not contain an access token.",
                     "error": "authorization_required",
                 }
+            ),
+            401,
+        )
+
+    @jwt.token_in_blocklist_loader
+    def check_if_token_in_blocklist(jwt_header, jwt_payload):
+        jti = jwt_payload["jti"]
+        token = TokenBlocklist.query.filter_by(jti=jti).first()
+        return token is not None
+
+    @jwt.revoked_token_loader
+    def revoked_token_callback(jwt_header, jwt_payload):
+        return (
+            jsonify(
+                {"message": "The token has been revoked.", "error": "token_revoked"}
             ),
             401,
         )

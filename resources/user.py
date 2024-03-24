@@ -1,6 +1,11 @@
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 from flask.views import MethodView
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from flask_jwt_extended import (
+    create_access_token,
+    get_jwt,
+    get_jwt_identity,
+    jwt_required,
+)
 from flask_smorest import Blueprint, abort
 from flask import jsonify
 from passlib.hash import pbkdf2_sha256
@@ -9,7 +14,7 @@ from sqlalchemy.exc import SQLAlchemyError, OperationalError
 
 from schemas import HeaderSchema, UserLoginSchema, UserSchema
 
-from models import AdminModel
+from models import AdminModel, TokenBlocklist
 from db import db
 
 blp = Blueprint("user", __name__, description="User registration")
@@ -66,6 +71,23 @@ class Login(MethodView):
             )
             response = user_schema.dump({"access_token": access_token, "user": user})
             return jsonify(response), 200
+        except OperationalError:
+            abort(500, message="Error connecting to the database.")
+        except SQLAlchemyError:
+            abort(500, message="An error occurred while accessing the database.")
+
+
+@blp.route("/user/logout")
+class Logout(MethodView):
+    @jwt_required()
+    def get(self):
+        # revoke user token
+        try:
+            jti = get_jwt()["jti"]
+            time = datetime.now(timezone.utc)
+            db.session.add(TokenBlocklist(jti=jti, revoked_at=time))
+            db.session.commit()
+            return jsonify(message="The user was successfully logged out."), 200
         except OperationalError:
             abort(500, message="Error connecting to the database.")
         except SQLAlchemyError:

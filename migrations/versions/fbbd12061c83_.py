@@ -2,11 +2,9 @@
 A new table named "admins" was created with an "id" column as the primary key.
 A foreign key constraint is added to the "id" column of the "admins" table,
 referencing the "id" column of the "users" table.
-
 A foreign key constraint named "fk_device_user" is created on the "devices" table,
 linking its "id" column to the "id" column of the "users" table.
 The "password" and "username" columns are dropped from the "devices" table.
-
 A new column named "role" is added to the "users" table.
 
 Revision ID: fbbd12061c83

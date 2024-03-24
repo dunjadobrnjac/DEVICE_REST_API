@@ -1,7 +1,13 @@
+from datetime import datetime, timezone
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from flask import jsonify
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import (
+    create_access_token,
+    get_jwt,
+    jwt_required,
+    get_jwt_identity,
+)
 from passlib.hash import pbkdf2_sha256
 from sqlalchemy.exc import SQLAlchemyError, OperationalError
 
@@ -13,7 +19,7 @@ from schemas import (
     DeviceTokenSchema,
 )
 
-from models import DeviceModel, DeviceStatus, AdminModel
+from models import DeviceModel, DeviceStatus, AdminModel, TokenBlocklist
 from db import db
 
 
@@ -138,6 +144,11 @@ class RegistrationStatus(MethodView):
 
             if device.status != DeviceStatus.APPROVED:
                 if device.status == DeviceStatus.BLACKLISTED:
+                    # revoke device token
+                    jti = get_jwt()["jti"]
+                    time = datetime.now(timezone.utc)
+                    db.session.add(TokenBlocklist(jti=jti, revoked_at=time))
+                    db.session.commit()
                     abort(403, message="Access to the requested resource is forbidden.")
 
                 device_json = device_schema.dump(device)
