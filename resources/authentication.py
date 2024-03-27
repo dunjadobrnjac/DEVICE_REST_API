@@ -244,6 +244,7 @@ class AllDevices(MethodView):
 
         try:
             user = AdminModel.query.get(user_id)
+
             if not user:
                 abort(403, message="Access to the requested resource is forbidden.")
 
@@ -263,6 +264,7 @@ class DevicesRequests(MethodView):
 
         try:
             user = AdminModel.query.get(user_id)
+
             if not user:
                 abort(403, message="Access to the requested resource is forbidden.")
 
