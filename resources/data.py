@@ -1,14 +1,14 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from flask import jsonify
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import get_jwt, jwt_required, get_jwt_identity
 from sqlalchemy.exc import SQLAlchemyError, OperationalError
 from schemas import DataSchema
 
-from models import DataModel, DataType, DeviceModel, DeviceStatus
+from models import DataModel, DataType, DeviceModel, DeviceStatus, TokenBlocklist
 from db import db
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 blp = Blueprint("data", __name__, description="Endpoint for receiving data.")
 
@@ -28,6 +28,12 @@ class DataResource(MethodView):
                 abort(404, message="Device not found.")
 
             if device.status != DeviceStatus.APPROVED:
+                if device.status == DeviceStatus.BLACKLISTED:
+                    # revoke device token
+                    jti = get_jwt()["jti"]
+                    time = datetime.now(timezone.utc)
+                    db.session.add(TokenBlocklist(jti=jti, revoked_at=time))
+                    db.session.commit()
                 abort(403, message="Access to the requested resource is forbidden.")
 
             value = data_payload.get("value")

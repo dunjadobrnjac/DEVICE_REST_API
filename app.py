@@ -12,6 +12,8 @@ from resources import AuthBlueprint
 from resources import UserBlueprint
 from resources import DataBlueprint
 
+from models import TokenBlocklist
+
 
 def create_app():
     app = Flask(__name__)
@@ -71,27 +73,44 @@ def create_app():
             401,
         )
 
+    @jwt.token_in_blocklist_loader
+    def check_if_token_in_blocklist(jwt_header, jwt_payload):
+        jti = jwt_payload["jti"]
+        token = TokenBlocklist.query.filter_by(jti=jti).first()
+        return token is not None
+
+    @jwt.revoked_token_loader
+    def revoked_token_callback(jwt_header, jwt_payload):
+        return (
+            jsonify(
+                {"message": "The token has been revoked.", "error": "token_revoked"}
+            ),
+            401,
+        )
+
     def kill_function():
         # it will kill server after few seconds waiting for responding
         import signal
         from time import sleep
+
         sleep(2)
         os.kill(os.getpid(), signal.SIGINT)
 
-    @app.route('/shutdown', methods=['GET'])
+    @app.route("/shutdown", methods=["GET"])
     def shutdown():
         # TODO: enable only for admin
         # TODO: enable only when debugging
         # TODO: resolve
         from threading import Thread
-        print(' * Shutting down Flask app...')
+
+        print(" * Shutting down Flask app...")
         # will create and start thread that will kill the server
-        thread = Thread(target=kill_function,)
+        thread = Thread(
+            target=kill_function,
+        )
         thread.start()
         return (
-            jsonify(
-                {"message": "Shutting down Flask app...."}
-            ),
+            jsonify({"message": "Shutting down Flask app...."}),
             200,
         )
 
