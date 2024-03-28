@@ -79,7 +79,7 @@ flask db upgrade
 ## Running the Application
 After generating the JWT secret key, you can run the application. Execute the following command:
 ```bash
-flask run
+waitress-serve --port=5000 wsgi:app 
 ```
 (Note: Starting the application will not be possible if the JWT key is not defined in the `.env` file.)
 
