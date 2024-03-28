@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "a1479169-49e2-4efe-adc6-6e18724b3243",
+		"_postman_id": "768a481e-fcea-49fa-9704-b7aa753136e1",
 		"name": "REST API IoT",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "6128504"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -4227,7 +4226,7 @@
 					"response": []
 				},
 				{
-					"name": "Login user (user logged in) Copy",
+					"name": "Login user (user logged in)",
 					"event": [
 						{
 							"listen": "test",
@@ -5607,56 +5606,113 @@
 			]
 		},
 		{
-			"name": "shutdown",
-			"event": [
+			"name": "Shutdown",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200 OK\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});"
+					"name": "Login user (user logged in)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is in JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body fields are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"access_token\");\r",
+									"    pm.expect(jsonData).to.have.property(\"user\");\r",
+									"\r",
+									"    jsonData = jsonData.user;\r",
+									"\r",
+									"    pm.expect(jsonData).to.have.property(\"id\");\r",
+									"    pm.expect(jsonData.id).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"username\");\r",
+									"    pm.expect(jsonData.username).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set(\"user_token\", jsonData.access_token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "admin",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "admin",
+								"type": "text"
+							}
 						],
-						"type": "text/javascript",
-						"packages": {}
-					}
+						"url": {
+							"raw": "{{url}}/user/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
 				},
 				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "username",
-						"value": "{{usernameAdmin}}",
-						"type": "text"
-					},
-					{
-						"key": "password",
-						"value": "{{passwordAdmin}}",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{url}}/shutdown",
-					"host": [
-						"{{url}}"
+					"name": "shutdown",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
 					],
-					"path": [
-						"shutdown"
-					]
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/shutdown",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"shutdown"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	]
 }
