@@ -5,6 +5,7 @@ from flask_smorest import Api, abort
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager, get_jwt_identity, jwt_required
 from dotenv import load_dotenv
+from flask_cors import CORS
 
 import signal
 from time import sleep
@@ -25,6 +26,8 @@ from models import TokenBlocklist, AdminModel
 def create_app():
     app = Flask(__name__)
     load_dotenv()  # load contents from .env
+
+    CORS(app, origins="http://localhost:4200")  # CORS policy
 
     app.config["API_TITLE"] = "IoT REST API"
     app.config["API_VERSION"] = "v1"

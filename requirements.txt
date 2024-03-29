@@ -10,3 +10,4 @@ psycopg2
 passlib
 marshmallow-enum
 waitress
+flask-cors
