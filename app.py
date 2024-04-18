@@ -1,10 +1,18 @@
 from datetime import timedelta
 import os
 from flask import Flask, jsonify
-from flask_smorest import Api
+from flask_smorest import Api, abort
 from flask_migrate import Migrate
-from flask_jwt_extended import JWTManager
+from flask_jwt_extended import JWTManager, get_jwt_identity, jwt_required
 from dotenv import load_dotenv
+from flask_cors import CORS
+
+import signal
+from time import sleep
+from threading import Thread
+from functools import wraps
+
+from sqlalchemy.exc import SQLAlchemyError, OperationalError
 
 from db import db
 
@@ -12,12 +20,14 @@ from resources import AuthBlueprint
 from resources import UserBlueprint
 from resources import DataBlueprint
 
-from models import TokenBlocklist
+from models import TokenBlocklist, AdminModel
 
 
 def create_app():
     app = Flask(__name__)
     load_dotenv()  # load contents from .env
+
+    CORS(app, origins="http://localhost:4200")  # CORS policy
 
     app.config["API_TITLE"] = "IoT REST API"
     app.config["API_VERSION"] = "v1"
@@ -88,31 +98,44 @@ def create_app():
             401,
         )
 
+    def debug_only(func):
+        @wraps(func)
+        def decorated_function(*args, **kwargs):
+            if not app.debug:
+                abort(403, message="Access to the requested resource is forbidden.")
+            return func(*args, **kwargs)
+
+        return decorated_function
+
     def kill_function():
         # it will kill server after few seconds waiting for responding
-        import signal
-        from time import sleep
-
         sleep(2)
         os.kill(os.getpid(), signal.SIGINT)
 
     @app.route("/shutdown", methods=["GET"])
+    @jwt_required()
+    @debug_only
     def shutdown():
-        # TODO: enable only for admin
-        # TODO: enable only when debugging
-        # TODO: resolve
-        from threading import Thread
+        admin_id = get_jwt_identity()
 
-        print(" * Shutting down Flask app...")
-        # will create and start thread that will kill the server
-        thread = Thread(
-            target=kill_function,
-        )
-        thread.start()
-        return (
-            jsonify({"message": "Shutting down Flask app...."}),
-            200,
-        )
+        try:
+            admin = AdminModel.query.filter_by(id=admin_id).first()
+            if not admin:
+                abort(403, message="Access to the requested resource is forbidden.")
+            print(" * Shutting down Flask app...")
+            # will create and start thread that will kill the server
+            thread = Thread(
+                target=kill_function,
+            )
+            thread.start()
+            return (
+                jsonify({"message": "Shutting down Flask app...."}),
+                200,
+            )
+        except OperationalError:
+            abort(500, message="Error connecting to the database.")
+        except SQLAlchemyError:
+            abort(500, message="An error occurred while accessing the database.")
 
     api.register_blueprint(AuthBlueprint)
     api.register_blueprint(UserBlueprint)
