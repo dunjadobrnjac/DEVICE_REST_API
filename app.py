@@ -1,5 +1,7 @@
 from datetime import timedelta
 import os
+import sys
+import signal
 from flask import Flask, jsonify
 from flask_smorest import Api, abort
 from flask_migrate import Migrate
@@ -140,5 +142,21 @@ def create_app():
     api.register_blueprint(AuthBlueprint)
     api.register_blueprint(UserBlueprint)
     api.register_blueprint(DataBlueprint)
+
+    # @app.before_request
+    # def print_pid():
+    #     print("PID of the Flask application:", os.getpid())
+
+    # handling SIGINT (CTRL+C)
+    def signal_handler(sig, frame):
+        print("Received SIGINT, shutting down gracefully.")
+        sys.exit(0)
+
+    signal.signal(signal.SIGINT, signal_handler)
+
+    # kill endpoint
+    @app.route("/shutdown", methods=["POST"])
+    def shutdown():
+        os.kill(os.getpid(), signal.SIGINT)
 
     return app
